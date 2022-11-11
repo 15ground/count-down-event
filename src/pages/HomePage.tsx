@@ -50,7 +50,7 @@ export default function HomePage() {
     const theme = useTheme();
     const classes = useStyles();
     const { days, hours, minutes, seconds } = useCountDown();
-
+    const { innerWidth: width, innerHeight: height } = window;
     const remainingTimes: Time[] = [
         { title: 'days', value: days },
         { title: 'hours', value: hours },
@@ -63,7 +63,7 @@ export default function HomePage() {
 
     return (
         <Grid container justifyContent="center" alignItems="center" className={classes.baseStyles}>
-            {isExpired && <ReactConfetti />}
+            {isExpired && <ReactConfetti width={width} height={height - 1} />}
             <Stack justifyContent="center" alignItems="center" spacing={5}>
                 <Box
                     component={motion.p}
