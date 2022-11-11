@@ -1,8 +1,11 @@
 import useCountDown from '@hooks/useCountDown';
-import { Grid, Stack, StackProps, Theme, Typography } from '@mui/material';
-import React from 'react';
+import { Box, Grid, Stack, StackProps, Theme, Tooltip, Typography, useMediaQuery, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { omit } from 'lodash';
+import ReactConfetti from 'react-confetti';
+import { motion } from 'framer-motion';
+import { GitHub } from '@mui/icons-material';
+import { BsFacebook } from 'react-icons/bs';
 
 const useStyles = makeStyles((theme: Theme) => ({
     baseStyles: {
@@ -35,11 +38,7 @@ const BaseTime = ({ time, stackProps }: { time: Time; stackProps?: StackProps })
             }}
             {...omit(stackProps, 'sx')}
         >
-            <Typography
-                fontSize={52}
-                color="#C62D2F"
-                fontWeight={700}
-            >
+            <Typography fontSize={52} color="#C62D2F" fontWeight={700}>
                 {time.value}
             </Typography>
             <Typography color="GrayText">{time.title}</Typography>
@@ -48,50 +47,107 @@ const BaseTime = ({ time, stackProps }: { time: Time; stackProps?: StackProps })
 };
 
 export default function HomePage() {
+    const theme = useTheme();
     const classes = useStyles();
     const { days, hours, minutes, seconds } = useCountDown();
+
     const remainingTimes: Time[] = [
         { title: 'days', value: days },
         { title: 'hours', value: hours },
         { title: 'minutes', value: minutes },
         { title: 'seconds', value: seconds },
     ];
+    const isExpired = days === '00' && hours === '00' && minutes === '00' && seconds === '00';
+
+    const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+
     return (
         <Grid container justifyContent="center" alignItems="center" className={classes.baseStyles}>
+            {isExpired && <ReactConfetti />}
             <Stack justifyContent="center" alignItems="center" spacing={5}>
-                <Typography
-                    fontSize={32}
-                    color="primary"
-                    fontWeight={550}
-                    sx={{ textShadow: '0 0 5px rgba(198, 45, 47, 1)' }}
+                <Box
+                    component={motion.p}
+                    initial={{ x: '100vw', opacity: 0.5, rotateZ: 180 }}
+                    animate={{ x: 0, opacity: 1, rotateZ: 0 }}
+                    transition={{ delay: 0.2, type: 'spring', stiffness: 120 }}
                 >
-                    LUNAR NEW YEAR 2023
-                </Typography>
-                <Stack direction="row" alignItems="center" spacing={3}>
+                    <Typography
+                        fontSize={32}
+                        color="primary"
+                        fontWeight={550}
+                        sx={{ textShadow: '0 0 5px rgba(198, 45, 47, 1)' }}
+                        align="center"
+                    >
+                        {!isExpired ? 'WAITING FOR LUNAR NEW YEAR 2023' : 'HAPPY LUNAR NEW YEAR 2023'}
+                    </Typography>
+                </Box>
+                <Stack
+                    direction="row"
+                    alignItems="center"
+                    justifyContent="center"
+                    sx={{ flexWrap: { sm: 'nowrap', xs: 'wrap' } }}
+                    gap={3}
+                >
                     {remainingTimes.map((item, index) => {
                         const isLast = index === remainingTimes.length - 1;
                         return (
                             <>
-                                <BaseTime
-                                    time={item}
-                                    stackProps={{
-                                        sx: {
-                                            borderLeft: index === 0 ? '2px solid #EABD68' : 'none',
-                                            borderBottom: index % 2 === 0 ? '2px solid #EABD68' : 'none',
-                                            borderTop: index % 2 !== 0 ? '2px solid #EABD68' : 'none',
-                                            borderRight: isLast ? '2px solid #EABD68' : 'none',
-                                        },
-                                    }}
-                                />
-                                {!isLast && (
-                                    <Typography fontSize={22} color="GrayText">
-                                        :
-                                    </Typography>
+                                <Box
+                                    component={motion.div}
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    transition={{ delay: index + 0.5, duration: index + 0.5 }}
+                                >
+                                    <BaseTime
+                                        time={item}
+                                        stackProps={{
+                                            sx: {
+                                                borderLeft: index === 0 ? '2px solid #EABD68' : 'none',
+                                                borderBottom: index % 2 === 0 ? '2px solid #EABD68' : 'none',
+                                                borderTop: index % 2 !== 0 ? '2px solid #EABD68' : 'none',
+                                                borderRight: isLast ? '2px solid #EABD68' : 'none',
+                                            },
+                                        }}
+                                    />
+                                </Box>
+                                {!isLast && !isMobile && (
+                                    <Box
+                                        component={motion.div}
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: 1 }}
+                                        transition={{ delay: index + 1, duration: index + 1 }}
+                                    >
+                                        <Typography fontSize={22} color="GrayText">
+                                            :
+                                        </Typography>
+                                    </Box>
                                 )}
                             </>
                         );
                     })}
                 </Stack>
+            </Stack>
+            <Stack position="fixed" direction="row" spacing={1.5} sx={{ bottom: 20, cursor: 'pointer' }}>
+                <Box
+                    component={motion.div}
+                    initial={{ x: '-100vw', rotateZ: -180 }}
+                    animate={{ x: 0, rotateZ: 0 }}
+                    transition={{ delay: 0.2, type: 'spring', stiffness: 120 }}
+                >
+                    <a href="https://www.facebook.com/v1ethung" target="blank">
+                        <BsFacebook style={{ fontSize: 22, fill: theme.palette.info.main }} />
+                    </a>
+                </Box>
+                <Box
+                    component={motion.div}
+                    initial={{ x: '100vw', rotateZ: 180 }}
+                    animate={{ x: 0, rotateZ: 0 }}
+                    transition={{ delay: 0.2, type: 'spring', stiffness: 120 }}
+                >
+                    <a href="https://github.com/15ground" target="blank" style={{ color: 'inherit' }}>
+                        <GitHub />
+                    </a>
+                </Box>
             </Stack>
         </Grid>
     );
