@@ -1,5 +1,4 @@
 import moment from 'moment';
-import { format } from 'path';
 import { useEffect, useState } from 'react';
 import { appConfig } from 'src/config/IConfig';
 import { formatNumber } from 'src/helpers/formatNumber';
@@ -7,26 +6,26 @@ import { formatNumber } from 'src/helpers/formatNumber';
 const useCountDown = () => {
     const [currentDate, setCurrentDate] = useState(new Date().getTime());
 
-    const countDate = new Date(appConfig.endDate).getTime();
-    const time = countDate - currentDate;
-    
-    const days = moment.duration(time).days();
-    const hours = moment.duration(time).hours();
-    const minutes = moment.duration(time).minutes();
-    const seconds = moment.duration(time).seconds();
+    const countDate = new Date(appConfig.expiredDate).getTime();
+    const remainingTime = countDate - currentDate;
+
+    const days = Math.floor(moment.duration(remainingTime).asDays());
+    const hours = moment.duration(remainingTime).hours();
+    const minutes = moment.duration(remainingTime).minutes();
+    const seconds = moment.duration(remainingTime).seconds();
 
     useEffect(() => {
-        if (time <= 0) return;
+        if (remainingTime <= 0) return;
         const timeOut = setInterval(() => {
             setCurrentDate((prev) => new Date().getTime());
         }, 1000);
         return () => {
             clearTimeout(timeOut);
         };
-    }, [time]);
+    }, [remainingTime]);
 
     return {
-        time,
+        time: remainingTime,
         days: formatNumber(days),
         hours: formatNumber(hours),
         minutes: formatNumber(minutes),
