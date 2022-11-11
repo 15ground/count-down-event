@@ -27,14 +27,15 @@ const BaseTime = ({ time, stackProps }: { time: Time; stackProps?: StackProps })
             sx={{
                 py: 2,
                 px: 4,
-                width: 50,
+                width: 70,
                 borderRadius: 3,
                 boxShadow: '0px 0px 10px 0px rgba(234, 189, 104, 0.8)',
+                cursor: 'pointer',
                 ...stackProps?.sx,
             }}
             {...omit(stackProps, 'sx')}
         >
-            <Typography fontSize={38} color="#C62D2F">
+            <Typography fontSize={52} color="#C62D2F" fontWeight={700}>
                 {time.value}
             </Typography>
             <Typography color="GrayText">{time.title}</Typography>
@@ -54,7 +55,9 @@ export default function HomePage() {
     return (
         <Grid container justifyContent="center" alignItems="center" className={classes.baseStyles}>
             <Stack justifyContent="center" alignItems="center" spacing={5}>
-                <Typography fontSize={46} color="primary">LUNAR NEW YEAR 2023 IS COMING</Typography>
+                <Typography fontSize={32} color="primary" fontWeight={550}>
+                    LUNAR NEW YEAR 2023
+                </Typography>
                 <Stack direction="row" alignItems="center" spacing={3}>
                     {remainingTimes.map((item, index) => {
                         const isLast = index === remainingTimes.length - 1;
