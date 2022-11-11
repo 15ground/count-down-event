@@ -35,7 +35,11 @@ const BaseTime = ({ time, stackProps }: { time: Time; stackProps?: StackProps })
             }}
             {...omit(stackProps, 'sx')}
         >
-            <Typography fontSize={52} color="#C62D2F" fontWeight={700}>
+            <Typography
+                fontSize={52}
+                color="#C62D2F"
+                fontWeight={700}
+            >
                 {time.value}
             </Typography>
             <Typography color="GrayText">{time.title}</Typography>
@@ -55,7 +59,12 @@ export default function HomePage() {
     return (
         <Grid container justifyContent="center" alignItems="center" className={classes.baseStyles}>
             <Stack justifyContent="center" alignItems="center" spacing={5}>
-                <Typography fontSize={32} color="primary" fontWeight={550}>
+                <Typography
+                    fontSize={32}
+                    color="primary"
+                    fontWeight={550}
+                    sx={{ textShadow: '0 0 5px rgba(198, 45, 47, 1)' }}
+                >
                     LUNAR NEW YEAR 2023
                 </Typography>
                 <Stack direction="row" alignItems="center" spacing={3}>
