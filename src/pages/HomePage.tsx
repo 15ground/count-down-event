@@ -68,6 +68,8 @@ export default function HomePage() {
         console.log('🚀 ~ file: HomePage.tsx:69 ~ useEffect ~ isInView', isInView);
         if (isInView) {
             control.start('animate');
+        }else{
+            control.start('initial')
         }
     }, [control, isInView]);
     const variants = {
