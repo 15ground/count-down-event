@@ -64,8 +64,8 @@ export default function HomePage() {
     const control = useAnimation();
     const ref = useRef(null);
     const isInView = useInView(ref);
+    console.log('🚀 ~ file: HomePage.tsx:69 ~ useEffect ~ isInView', isInView);
     useEffect(() => {
-        console.log('🚀 ~ file: HomePage.tsx:69 ~ useEffect ~ isInView', isInView);
         if (isInView) {
             control.start('animate');
         }else{
